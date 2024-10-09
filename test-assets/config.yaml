@@ -1,0 +1,28 @@
+fastcgi:
+  address: php
+  port: 9000
+  script_path: /srv/test.php
+  max_parallel_requests: 2
+  cgi_environment:
+    # Default CGI environment variables. These can be overridden at the task level via the field_mappings section.
+    CONTENT_TYPE: application/json
+    DOCUMENT_ROOT: /srv
+    REQUEST_METHOD: POST
+
+queue:
+  sqs:
+    api_endpoint_url: http://elasticmq:9324
+    queue_url: http://elasticmq:9324/testQueue.fifo/
+    visibility_timeout: 300
+
+# Map queue item fields to CGI environment variables.
+# Variable ref: https://datatracker.ietf.org/doc/html/rfc3875#section-4.1
+field_mappings:
+  REQUEST_URI:
+    source: BodyJson
+    field: job
+  TRACE_ID:
+    source: Metadata
+    field: traceId
+
+log_level: Info

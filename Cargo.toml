@@ -1,0 +1,25 @@
+[package]
+name = "fcgiq"
+description = "A Simple Queue Service (SQS) client which distributes work to a FastCGI pool."
+version = "0.1.0"
+edition = "2021"
+authors = ["Glenn Schmidt"]
+repository = "https://github.com/glennschmidt/fcgiq/"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+aws-config = "1.0"
+aws-sdk-sqs = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+fastcgi-client = "0.9"
+http = "1.0"
+httparse = "1.0"
+log = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yml = "0.0.12"
+simple_logger = "5.0"
+thiserror = "1.0"
+tokio = { version = "1.40", features = ["full"] }
+tokio-util = "0.7"

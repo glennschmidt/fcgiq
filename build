@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+for arch in amd64 arm64; do
+  echo
+  echo "Building for $arch"
+  echo
+  docker run --rm --platform=linux/$arch --mount type=bind,source="$(pwd)",target=/src --workdir=/src rust:1-slim bash -c "\
+    cargo build --release --target-dir=/srv/build \
+    && cp -R /srv/build/release/fcgiq /src/fcgiq_linux_$arch \
+  "
+done

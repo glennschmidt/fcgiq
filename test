@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker compose up -d
+docker compose exec buildenv \
+  bash /src/test-assets/queue-task.sh
+docker compose exec buildenv \
+  cargo run --target-dir=/srv/build -- -c /src/test-assets/config.yaml

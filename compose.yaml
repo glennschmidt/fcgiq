@@ -1,0 +1,35 @@
+services:
+  # A container where we can build the Rust code (and execute fcgiq for testing purposes).
+  buildenv:
+    image: rust:1-bookworm
+    restart: on-failure
+    command: bash
+    tty: true
+    stop_signal: SIGKILL
+    volumes:
+      - ./:/src
+    working_dir: /src
+    environment:
+      AWS_ACCESS_KEY_ID: dummy
+      AWS_DEFAULT_REGION: dummy
+      AWS_SECRET_ACCESS_KEY: dummy
+
+  # An SQS-comptatible queue implementation, for testing
+  elasticmq:
+    image: softwaremill/elasticmq-native
+    restart: on-failure
+    ports:
+      # HTTP API
+      - "127.0.0.1:9324:9324"
+      # HTTP UI
+      - "127.0.0.1:9325:9325"
+    volumes:
+      - ./test-assets/elasticmq/elasticmq.conf:/opt/elasticmq.conf
+      - ./test-assets/elasticmq/logback.xml:/opt/logback.xml
+
+  # A FastCGI-compatible application server, for testing
+  php:
+    image: php:8.2-fpm-bookworm
+    restart: on-failure
+    volumes:
+      - ./test-assets/php:/srv
